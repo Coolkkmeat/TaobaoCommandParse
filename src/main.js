@@ -22,13 +22,13 @@
 (function () {
     "use strict";
     $("#q").on("input propertychange", function () {
-        let symbols = ['\\$','¥','€','₤','₳','¢','¤','฿','₵','₡','₫','ƒ','₲','₭','£','₥','₦','₱','〒','₮','₩','₴','₪','៛','﷼','₢','M','₰','₯','₠','₣','₧','ƒ'];
+        let symbols = ["\\$", "¥", "€", "₤", "₳", "¢", "¤", "฿", "₵", "₡", "₫", "ƒ", "₲", "₭", "£", "₥", "₦", "₱", "〒", "₮", "₩", "₴", "₪", "៛", "﷼", "₢", "M", "₰", "₯", "₠", "₣", "₧", "ƒ", "￥"];
 
-        let reExpParmPre = symbols.join("|");
-        let regExpParm = '('+ reExpParmPre +')([a-zA-Z0-9]*)('+ reExpParmPre +')';
-        let regExpObj = new RegExp(regExpParm);
+        let regExpParamPrepare = symbols.join("|");
+        let regExpParam = `(${regExpParamPrepare})([a-zA-Z0-9]*)(${regExpParamPrepare})`;
+        let regExpObject = new RegExp(regExpParam);
 
-        var code = $("#q").val().match(regExpObj)[2];
+        var code = $("#q").val().match(regExpObject)[2];
         if (code) {
             GM_xmlhttpRequest({
                 url: "//www.taofake.com/index/tools/gettkljm.html?tkl=" + code,
