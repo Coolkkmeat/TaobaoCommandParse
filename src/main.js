@@ -22,7 +22,21 @@
 (function () {
     "use strict";
     $("#q").on("input propertychange", function () {
-        var code = $("#q").val().match(/(￥|\$)([a-zA-Z0-9]*)(￥|\$)/)[2];
+        let symbols = ['\\$','€','₤','₳','¢','¤','฿','฿','₵','₡','₫','ƒ','₲','₭','£','₥','₦','₱','〒','₮','₩','₴','₪','៛','﷼','₢','M','₰','₯','₠','₣','₧','ƒ'];
+
+        let reExpParmPre = '';
+        for (let i in symbols) {
+            if (i == 0) {
+                reExpParmPre = symbols[i];
+            } else {
+                reExpParmPre += '|' + symbols[i];
+            }
+        }
+        let regExpParm = '('+ reExpParmPre +')([a-zA-Z0-9]*)('+ reExpParmPre +')'
+
+        let regExpObj = new RegExp(regExpParm);
+
+        var code = $("#q").val().match(regExpObj)[2];
         if (code) {
             GM_xmlhttpRequest({
                 url: "//www.taofake.com/index/tools/gettkljm.html?tkl=" + code,
