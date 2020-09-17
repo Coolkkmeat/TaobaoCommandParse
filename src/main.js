@@ -24,8 +24,8 @@
     $("#q").on("input propertychange", function () {
         let symbols = ['\\$','€','₤','₳','¢','¤','฿','฿','₵','₡','₫','ƒ','₲','₭','£','₥','₦','₱','〒','₮','₩','₴','₪','៛','﷼','₢','M','₰','₯','₠','₣','₧','ƒ'];
 
-        let reExpParmPre = symbols.join("|")
-        let regExpParm = '('+ reExpParmPre +')([a-zA-Z0-9]*)('+ reExpParmPre +')'
+        let reExpParmPre = symbols.join("|");
+        let regExpParm = '('+ reExpParmPre +')([a-zA-Z0-9]*)('+ reExpParmPre +')';
         let regExpObj = new RegExp(regExpParm);
 
         var code = $("#q").val().match(regExpObj)[2];
