@@ -19,16 +19,24 @@
 // @run-at          document-idle
 // ==/UserScript==
 
-(function () {
+$(function () {
     "use strict";
-    $("#q").on("input propertychange", function () {
-        let symbols = ["\\$", "¥", "€", "₤", "₳", "¢", "¤", "฿", "₵", "₡", "₫", "ƒ", "₲", "₭", "£", "₥", "₦", "₱", "〒", "₮", "₩", "₴", "₪", "៛", "﷼", "₢", "M", "₰", "₯", "₠", "₣", "₧", "ƒ", "￥"];
+    /**
+     * 监听
+     */
+    $("#q,#mq").on("input propertychange", function () {
+        work(this);
+    });
 
+    /**
+     * 处理
+     */
+    function work(element) {
+        let symbols = ["\\$", "¥", "€", "₤", "₳", "¢", "¤", "฿", "₵", "₡", "₫", "ƒ", "₲", "₭", "£", "₥", "₦", "₱", "〒", "₮", "₩", "₴", "₪", "៛", "﷼", "₢", "M", "₰", "₯", "₠", "₣", "₧", "ƒ", "￥"];
         let regExpParamPrepare = symbols.join("|");
         let regExpParam = `(${regExpParamPrepare})([a-zA-Z0-9]*)(${regExpParamPrepare})`;
         let regExpObject = new RegExp(regExpParam);
-
-        var code = $("#q").val().match(regExpObject)[2];
+        var code = $(element).val().match(regExpObject)[2];
         if (code) {
             GM_xmlhttpRequest({
                 url: "//www.taofake.com/index/tools/gettkljm.html?tkl=" + code,
@@ -43,5 +51,5 @@
                 }
             });
         }
-    });
+    }
 })();
