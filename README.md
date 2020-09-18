@@ -11,6 +11,3 @@
 
 ## 数据源
 解析功能的接口来自[淘发客](https://www.taofake.com/tools/tkljm/)。
-
-## 源码
-- [Github](https://github.com/Coolkkmeat/TaobaoCommandParse)
