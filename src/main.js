@@ -33,7 +33,6 @@
         let regExpObject = new RegExp(regExpParam);
         let code = text.match(regExpObject);
         code = code == undefined ? false : code[2];
-        console.log(code)
         if (code) {
             GM_xmlhttpRequest({
                 url: "//www.taofake.com/index/tools/gettkljm.html?tkl=" + code,
@@ -54,15 +53,17 @@
      * 为input添加input事件 方便改变之后正则匹配
      */
     function addInputEvent(){
+        // 淘宝首页有一个 iframe 判断一下防止报错
+        if(selectInput == null){
+            return ;
+        }
         selectInput.addEventListener("input",(e)=>{
-            console.log(e.target.value)
             work(e.target.value)
         })
     }
 
     // DOMNodeInserted 事件的回调函数 方便移除 避免重复获取
     function getInsertedEvent(){
-        console.log("插入")
         getInput(2);
     }
 
@@ -79,7 +80,6 @@
             selectInput = document.getElementById("mq");
             if(selectInput != null){
                 // 获取到之后移除监听事件
-                console.log("事件移除")
                 window.removeEventListener("DOMNodeInserted", getInsertedEvent);
                 addInputEvent();
             }
