@@ -20,7 +20,7 @@
 
 (function (){
     "use strict";
-    
+
     let symbols = ["\\$", "¥", "€", "₤", "₳", "¢", "¤", "฿", "₵", "₡", "₫", "ƒ", "₲", "₭", "£", "₥", "₦", "₱", "〒", "₮", "₩", "₴", "₪", "៛", "﷼", "₢", "M", "₰", "₯", "₠", "₣", "₧", "ƒ", "￥", '\/'];
     let selectInput;
 
@@ -43,7 +43,7 @@
                 onload: function (res) {
                     res = JSON.parse(res.responseText);
                     if (res.code == 1) {
-                        window.location.href=res.data.url
+                        window.location.href=res.data.url;
                     }
                 }
             });
