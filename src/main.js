@@ -12,31 +12,28 @@
 // @contributionURL https://coolkk.net/
 // @license         Apache License 2.0
 // @charset		    UTF-8
-// @require         https://cdn.bootcdn.net/ajax/libs/jquery/1.10.0/jquery.min.js
 // @include         http*://*taobao.com/*
 // @grant           GM_xmlhttpRequest
 // @connect         taofake.com
 // @run-at          document-idle
 // ==/UserScript==
 
-$(function () {
+(function (){
     "use strict";
-    /**
-     * 监听
-     */
-    $("#q,#mq").on("input propertychange", function () {
-        work(this);
-    });
+    let selectInput;
 
     /**
-     * 处理
+     * 正则匹配口令
+     * @param {string} text 口令字符串
      */
-    function work(element) {
+    function work(text) {
         let symbols = ["\\$", "¥", "€", "₤", "₳", "¢", "¤", "฿", "₵", "₡", "₫", "ƒ", "₲", "₭", "£", "₥", "₦", "₱", "〒", "₮", "₩", "₴", "₪", "៛", "﷼", "₢", "M", "₰", "₯", "₠", "₣", "₧", "ƒ", "￥"];
         let regExpParamPrepare = symbols.join("|");
         let regExpParam = `(${regExpParamPrepare})([a-zA-Z0-9]*)(${regExpParamPrepare})`;
         let regExpObject = new RegExp(regExpParam);
-        var code = $(element).val().match(regExpObject)[2];
+        let code = text.match(regExpObject);
+        code = code == undefined ? false : code[2];
+        console.log(code)
         if (code) {
             GM_xmlhttpRequest({
                 url: "//www.taofake.com/index/tools/gettkljm.html?tkl=" + code,
@@ -46,10 +43,59 @@ $(function () {
                 onload: function (res) {
                     res = JSON.parse(res.responseText);
                     if (res.code == 1) {
-                        $(window).attr("location", res.data.url);
+                        window.location.href=res.data.url
                     }
                 }
             });
         }
     }
+
+    /**
+     * 为input添加input事件 方便改变之后正则匹配
+     */
+    function addInputEvent(){
+        selectInput.addEventListener("input",(e)=>{
+            console.log(e.target.value)
+            work(e.target.value)
+        })
+    }
+
+    // DOMNodeInserted 事件的回调函数 方便移除 避免重复获取
+    function getInsertedEvent(){
+        console.log("插入")
+        getInput(2);
+    }
+
+    /**
+     * 
+     * @param {int} type 搜索框类型 1 国内 2 全球站 
+     */
+    function getInput(type){
+        
+        if(type == 1){
+            selectInput = document.getElementById("q");
+            addInputEvent();
+        }else if(type == 2){
+            selectInput = document.getElementById("mq");
+            if(selectInput != null){
+                // 获取到之后移除监听事件
+                console.log("事件移除")
+                window.removeEventListener("DOMNodeInserted", getInsertedEvent);
+                addInputEvent();
+            }
+        }
+        
+    }
+
+    /**
+     * 判断是不是全球站
+     * 由于全球站节点是动态生成的 所以需要监听 DOMNodeInserted 事件
+     */
+    let host = window.location.host;
+    if(host == 'world.taobao.com'){
+        window.addEventListener("DOMNodeInserted", getInsertedEvent);
+    }else{
+        getInput(1); // 除全球站之外的页面都是后台渲染的 可以直接获取
+    }
+
 })();
