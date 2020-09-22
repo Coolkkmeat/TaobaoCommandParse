@@ -4,7 +4,7 @@
 // @namespace       net.coolkk.taobaocommandparse
 // @description     将淘宝生成的淘口令转换为链接
 // @description:en  Taobao Command Parse conversion into the link
-// @version         1.2.0
+// @version         1.3.1
 // @author          Coolkk
 // @icon            https://img.alicdn.com/tps/i3/T1OjaVFl4dXXa.JOZB-114-114.png
 // @homepage        https://github.com/Coolkkmeat/TaobaoCommandParse
