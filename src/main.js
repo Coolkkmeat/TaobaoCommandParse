@@ -18,17 +18,66 @@
 // @run-at          document-idle
 // ==/UserScript==
 
-(function (){
+(function () {
+    /**
+     * 严格模式
+     */
     "use strict";
 
-    let symbols = ["\\$", "¥", "€", "₤", "₳", "¢", "¤", "฿", "₵", "₡", "₫", "ƒ", "₲", "₭", "£", "₥", "₦", "₱", "〒", "₮", "₩", "₴", "₪", "៛", "﷼", "₢", "M", "₰", "₯", "₠", "₣", "₧", "ƒ", "￥", '\/', '\\(', '\\)'];
-    let selectInput;
+    /**
+     * 入口
+     */
+    if (window.location.host == "world.taobao.com") {
+        window.addEventListener("DOMNodeInserted", listenInserted);
+    } else {
+        getElement("other");
+    }
 
     /**
-     * 正则匹配口令
-     * @param {string} text 口令字符串
+     * 监听插入
+     */
+    function listenInserted() {
+        getElement("world");
+    }
+
+    /**
+     * 获取元素
+     * @param {string} type 站点类型
+     */
+    function getElement(type) {
+        let element;
+        switch (type) {
+            case "world"://全球站
+                element = document.getElementById("mq");
+                if (element != null) {
+                    window.removeEventListener("DOMNodeInserted", listenInserted);
+                    listenInput(element);
+                }
+                break;
+            case "other"://其它站
+                element = document.getElementById("q");
+                listenInput(element);
+                break;
+        }
+    }
+
+    /**
+     * 监听输入
+     * @param {element} element 元素
+     */
+    function listenInput(element) {
+        if (element == null) return;
+        element.addEventListener("input", function (e) {
+            work(e.target.value)
+        });
+    }
+
+    /**
+     * 处理
+     * @param {string} text 文本
      */
     function work(text) {
+        let symbols = ["\\$", "¥", "€", "₤", "₳", "¢", "¤", "฿", "₵", "₡", "₫", "ƒ", "₲", "₭", "£", "₥", "₦", "₱", "〒", "₮", "₩", "₴", "₪", "៛", "﷼", "₢", "M", "₰", "₯", "₠", "₣", "₧", "ƒ", "￥", "\/", "\\(", "\\)"];
         let regExpParamPrepare = symbols.join("|");
         let regExpParam = `(${regExpParamPrepare})([a-zA-Z0-9]*)(${regExpParamPrepare})`;
         let regExpObject = new RegExp(regExpParam);
@@ -43,60 +92,11 @@
                 onload: function (res) {
                     res = JSON.parse(res.responseText);
                     if (res.code == 1) {
-                        window.location.href=res.data.url;
+                        window.location.href = res.data.url;
                     }
                 }
             });
         }
-    }
-
-    /**
-     * 为input添加input事件 方便改变之后正则匹配
-     */
-    function addInputEvent(){
-        // 淘宝首页有一个 iframe 判断一下防止报错
-        if(selectInput == null){
-            return ;
-        }
-        selectInput.addEventListener("input",(e)=>{
-            work(e.target.value)
-        })
-    }
-
-    // DOMNodeInserted 事件的回调函数 方便移除 避免重复获取
-    function getInsertedEvent(){
-        getInput(2);
-    }
-
-    /**
-     * 
-     * @param {int} type 搜索框类型 1 国内 2 全球站 
-     */
-    function getInput(type){
-        
-        if(type == 1){
-            selectInput = document.getElementById("q");
-            addInputEvent();
-        }else if(type == 2){
-            selectInput = document.getElementById("mq");
-            if(selectInput != null){
-                // 获取到之后移除监听事件
-                window.removeEventListener("DOMNodeInserted", getInsertedEvent);
-                addInputEvent();
-            }
-        }
-        
-    }
-
-    /**
-     * 判断是不是全球站
-     * 由于全球站节点是动态生成的 所以需要监听 DOMNodeInserted 事件
-     */
-    let host = window.location.host;
-    if(host == 'world.taobao.com'){
-        window.addEventListener("DOMNodeInserted", getInsertedEvent);
-    }else{
-        getInput(1); // 除全球站之外的页面都是后台渲染的 可以直接获取
     }
 
 })();
