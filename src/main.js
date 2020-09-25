@@ -27,8 +27,9 @@
     /**
      * 入口
      */
+    let div = document.getElementById("oversea-searchbar")
     if (window.location.host == "world.taobao.com") {
-        window.addEventListener("DOMNodeInserted", listenInserted);
+        div.addEventListener("DOMNodeInserted", listenInserted);
     } else {
         getElement("other");
     }
@@ -50,7 +51,7 @@
             case "world"://全球站
                 element = document.getElementById("mq");
                 if (element != null) {
-                    window.removeEventListener("DOMNodeInserted", listenInserted);
+                    div.removeEventListener("DOMNodeInserted", listenInserted);
                     listenInput(element);
                 }
                 break;
