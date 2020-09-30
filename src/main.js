@@ -27,7 +27,7 @@
     /**
      * 入口
      */
-    let div = document.getElementById("oversea-searchbar")
+    let div = document.getElementById("oversea-searchbar");
     if (window.location.host == "world.taobao.com") {
         div.addEventListener("DOMNodeInserted", listenInserted);
     } else {
@@ -99,5 +99,4 @@
             });
         }
     }
-
 })();
