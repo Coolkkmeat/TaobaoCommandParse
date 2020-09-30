@@ -13,8 +13,12 @@
 // @license         Apache License 2.0
 // @charset		    UTF-8
 // @include         http*://*taobao.com/*
+// @grant           GM_setValue
+// @grant           GM_getValue
+// @grant           GM_registerMenuCommand
 // @grant           GM_xmlhttpRequest
 // @connect         taofake.com
+// @connect         taodaxiang.com
 // @run-at          document-idle
 // ==/UserScript==
 
@@ -27,6 +31,16 @@
     /**
      * 入口
      */
+    //设置
+    const config = { "data_source_list": ["taofake", "taodaxiang"], "data_source_now": GM_getValue("data_source_now", "taodaxiang") }
+    GM_registerMenuCommand("设置数据源", function () {
+        let configNew = prompt("解析功能的接口：" + config["data_source_list"].join(" 或 "), config["data_source_now"]);
+        if (configNew && configNew !== config["data_source_now"] && config["data_source_list"].indexOf(configNew) > -1) {
+            GM_setValue("data_source_now", configNew);
+            window.location.reload();
+        }
+    });
+    //获取元素
     let div = document.getElementById("oversea-searchbar");
     if (window.location.host == "world.taobao.com") {
         div.addEventListener("DOMNodeInserted", listenInserted);
@@ -85,18 +99,39 @@
         let code = text.match(regExpObject);
         code = code == undefined ? false : code[2];
         if (code) {
-            GM_xmlhttpRequest({
-                url: "//www.taofake.com/index/tools/gettkljm.html?tkl=" + code,
-                method: "GET",
-                responseType: "json",
-                timeout: 10000,
-                onload: function (res) {
-                    res = JSON.parse(res.responseText);
-                    if (res.code == 1) {
-                        window.location.href = res.data.url;
-                    }
-                }
-            });
+            switch (config["data_source_now"]) {
+                case "taofake":
+                    GM_xmlhttpRequest({
+                        url: "//www.taofake.com/index/tools/gettkljm.html?tkl=" + code,
+                        method: "GET",
+                        responseType: "json",
+                        timeout: 10000,
+                        onload: function (res) {
+                            res = JSON.parse(res.responseText);
+                            if (res.code == 1) {
+                                window.location.href = res.data.url;
+                            }
+                        }
+                    });
+                    break;
+                case "taodaxiang":
+                    GM_xmlhttpRequest({
+                        url: "//taodaxiang.com/taopass/parse/get",
+                        method: "POST",
+                        responseType: "json",
+                        timeout: 10000,
+                        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                        data: `content=${code}`,
+                        onload: function (res) {
+                            res = JSON.parse(res.responseText);
+                            console.log(res)///
+                            if (res.code == 0) {
+                                window.location.href = res.data.url;
+                            }
+                        }
+                    });
+                    break;
+            }
         }
     }
 })();
