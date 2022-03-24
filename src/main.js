@@ -40,19 +40,7 @@
         }
     });
     //获取元素
-    let div = document.getElementById("oversea-searchbar");
-    if (window.location.host == "world.taobao.com") {
-        div.addEventListener("DOMNodeInserted", listenInserted);
-    } else {
-        getElement("other");
-    }
-
-    /**
-     * 监听插入
-     */
-    function listenInserted() {
-        getElement("world");
-    }
+    getElement("other");
 
     /**
      * 获取元素
@@ -61,13 +49,6 @@
     function getElement(type) {
         let element;
         switch (type) {
-            case "world"://全球站
-                element = document.getElementById("mq");
-                if (element != null) {
-                    div.removeEventListener("DOMNodeInserted", listenInserted);
-                    listenInput(element);
-                }
-                break;
             case "other"://其它站
                 element = document.getElementById("q");
                 listenInput(element);

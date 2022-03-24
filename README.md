@@ -3,7 +3,7 @@
 
 ## 教程
 1. [安装脚本](https://greasyfork.org/scripts/411432)
-2. 打开[淘宝网](https://www.taobao.com/)或[淘宝搜索](https://s.taobao.com/)或[淘宝全球站](https://world.taobao.com/)
+2. 打开[淘宝网](https://www.taobao.com/)或[淘宝搜索](https://s.taobao.com/)
 3. 将淘口令输入或粘贴到搜索框中
 4. 自动解析并打开对应链接
 
