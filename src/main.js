@@ -17,7 +17,6 @@
 // @grant           GM_getValue
 // @grant           GM_registerMenuCommand
 // @grant           GM_xmlhttpRequest
-// @connect         taofake.com
 // @connect         taodaxiang.com
 // @run-at          document-idle
 // ==/UserScript==
@@ -32,7 +31,7 @@
      * 入口
      */
     //设置
-    const config = { "data_source_list": ["taofake", "taodaxiang"], "data_source_now": GM_getValue("data_source_now", "taodaxiang") }
+    const config = { "data_source_list": ["taodaxiang"], "data_source_now": GM_getValue("data_source_now", "taodaxiang") }
     GM_registerMenuCommand("设置数据源", function () {
         let configNew = prompt("解析功能的接口：" + config["data_source_list"].join(" 或 "), config["data_source_now"]);
         if (configNew && configNew !== config["data_source_now"] && config["data_source_list"].indexOf(configNew) > -1) {
@@ -100,20 +99,6 @@
         code = code == undefined ? false : code[2];
         if (code) {
             switch (config["data_source_now"]) {
-                case "taofake":
-                    GM_xmlhttpRequest({
-                        url: "//www.taofake.com/index/tools/gettkljm.html?tkl=" + code,
-                        method: "GET",
-                        responseType: "json",
-                        timeout: 10000,
-                        onload: function (res) {
-                            res = JSON.parse(res.responseText);
-                            if (res.code == 1) {
-                                window.location.href = res.data.url;
-                            }
-                        }
-                    });
-                    break;
                 case "taodaxiang":
                     GM_xmlhttpRequest({
                         url: "//taodaxiang.com/taopass/parse/get",
