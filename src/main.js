@@ -63,15 +63,16 @@
     function listenInput(element) {
         if (element == null) return;
         element.addEventListener("input", function (e) {
-            work(e.target.value)
+            work(e.target.value, element)
         });
     }
 
     /**
      * 处理
      * @param {string} text 文本
+     * @param {element} element 元素
      */
-    function work(text) {
+    function work(text, element) {
         let symbols = ["\\$", "¥", "€", "₤", "₳", "¢", "¤", "฿", "₵", "₡", "₫", "ƒ", "₲", "₭", "£", "₥", "₦", "₱", "〒", "₮", "₩", "₴", "₪", "៛", "﷼", "₢", "M", "₰", "₯", "₠", "₣", "₧", "ƒ", "￥", "\/", "\\(", "\\)"];
         let regExpParamPrepare = symbols.join("|");
         let regExpParam = `(${regExpParamPrepare})([a-zA-Z0-9]*)(${regExpParamPrepare})`;
@@ -79,6 +80,7 @@
         let code = text.match(regExpObject);
         code = code == undefined ? false : code[2];
         if (code) {
+            element.value = code;
             switch (config["data_source_now"]) {
                 case "taodaxiang":
                     GM_xmlhttpRequest({
@@ -90,7 +92,6 @@
                         data: `content=${code}`,
                         onload: function (res) {
                             res = JSON.parse(res.responseText);
-                            console.log(res)///
                             if (res.code == 0) {
                                 window.location.href = res.data.url;
                             }
