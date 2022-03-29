@@ -81,24 +81,32 @@
         code = code == undefined ? false : code[2];
         if (code) {
             element.value = code;
-            switch (config["data_source_now"]) {
-                case "taodaxiang":
-                    GM_xmlhttpRequest({
-                        url: "//taodaxiang.com/taopass/parse/get",
-                        method: "POST",
-                        responseType: "json",
-                        timeout: 10000,
-                        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                        data: `content=${code}`,
-                        onload: function (res) {
-                            res = JSON.parse(res.responseText);
-                            if (res.code == 0) {
-                                window.location.href = res.data.url;
-                            }
+            request(code);
+        }
+    }
+
+    /**
+     * 请求
+     * @param {string} code 淘口令
+     */
+    function request(code) {
+        switch (config["data_source_now"]) {
+            case "taodaxiang":
+                GM_xmlhttpRequest({
+                    url: "//taodaxiang.com/taopass/parse/get",
+                    method: "POST",
+                    responseType: "json",
+                    timeout: 10000,
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    data: `content=${code}`,
+                    onload: function (res) {
+                        res = JSON.parse(res.responseText);
+                        if (res.code == 0) {
+                            window.location.href = res.data.url;
                         }
-                    });
-                    break;
-            }
+                    }
+                });
+                break;
         }
     }
 })();
