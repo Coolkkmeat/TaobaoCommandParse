@@ -10,7 +10,7 @@
 ![图片_1](.github/image_1.jpg)
 
 ## 数据源
-解析功能的接口来自[淘大象](https://taodaxiang.com/taopass)。
+解析功能的接口来自[淘宝客](https://tool.chaozhi.hk/#/tklParse)和[淘大象](https://taodaxiang.com/taopass)。
 
 ## 声明
 本工具仅做学习交流，严禁用于商业用途。  

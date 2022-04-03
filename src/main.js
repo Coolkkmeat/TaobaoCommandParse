@@ -17,6 +17,7 @@
 // @grant           GM_getValue
 // @grant           GM_registerMenuCommand
 // @grant           GM_xmlhttpRequest
+// @connect         chaozhi.hk
 // @connect         taodaxiang.com
 // @run-at          document-idle
 // ==/UserScript==
@@ -31,7 +32,7 @@
      * 入口
      */
     //设置
-    const config = { "data_source_list": ["taodaxiang"], "data_source_now": GM_getValue("data_source_now", "taodaxiang") }
+    const config = { "data_source_list": ["taobaoke", "taodaxiang"], "data_source_now": GM_getValue("data_source_now", "taobaoke") }
     GM_registerMenuCommand("设置数据源", function () {
         let configNew = prompt("解析功能的接口：" + config["data_source_list"].join(" 或 "), config["data_source_now"]);
         if (configNew && configNew !== config["data_source_now"] && config["data_source_list"].indexOf(configNew) > -1) {
@@ -91,6 +92,33 @@
      */
     function request(code) {
         switch (config["data_source_now"]) {
+            case "taobaoke":
+                GM_xmlhttpRequest({
+                    url: "//api.chaozhi.hk/tool/webLogin",
+                    method: "POST",
+                    responseType: "json",
+                    timeout: 10000,
+                    headers: { "Content-Type": "application/json", "Host": "tool.chaozhi.hk" },
+                    data: '{ "type": 2, "name": "Coolkk", "pass": "coolkk" }',
+                    onload: function (res) {
+                        res = JSON.parse(res.responseText);
+                        GM_xmlhttpRequest({
+                            url: "//api.chaozhi.hk/tb/tklParse",
+                            method: "POST",
+                            responseType: "json",
+                            timeout: 10000,
+                            headers: { "Content-Type": "application/json", "Host": "tool.chaozhi.hk" },
+                            data: `{ "tkl": "${code}", "token": "${res.data.token}" }`,
+                            onload: function (res) {
+                                res = JSON.parse(res.responseText);
+                                if (res.msgCode == 0) {
+                                    window.location.href = res.data.url;
+                                }
+                            }
+                        });
+                    }
+                });
+                break;
             case "taodaxiang":
                 GM_xmlhttpRequest({
                     url: "//taodaxiang.com/taopass/parse/get",
