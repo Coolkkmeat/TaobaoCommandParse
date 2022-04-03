@@ -32,16 +32,26 @@
      * 入口
      */
     //设置
-    const config = { "data_source_list": ["taobaoke", "taodaxiang"], "data_source_now": GM_getValue("data_source_now", "taobaoke") }
+    const config = { "data_source_list": ["taobaoke", "taodaxiang"], "data_source_now": GM_getValue("data_source_now", "none") }
+    if (config["data_source_now"] == "none") {
+        control_dataSource();
+    }
     GM_registerMenuCommand("设置数据源", function () {
-        let configNew = prompt("解析功能的接口：" + config["data_source_list"].join(" 或 "), config["data_source_now"]);
+        control_dataSource();
+    });
+    //获取元素
+    getElement("other");
+
+    /**
+     * 控制-设置数据源
+     */
+    function control_dataSource() {
+        let configNew = prompt("请选择解析功能的接口：" + config["data_source_list"].join(" 或 "), config["data_source_now"]);
         if (configNew && configNew !== config["data_source_now"] && config["data_source_list"].indexOf(configNew) > -1) {
             GM_setValue("data_source_now", configNew);
             window.location.reload();
         }
-    });
-    //获取元素
-    getElement("other");
+    }
 
     /**
      * 获取元素
@@ -134,6 +144,9 @@
                         }
                     }
                 });
+                break;
+            default:
+                control_dataSource();
                 break;
         }
     }
