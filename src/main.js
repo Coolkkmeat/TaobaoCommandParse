@@ -109,7 +109,7 @@
                     responseType: "json",
                     timeout: 10000,
                     headers: { "Content-Type": "application/json", "Host": "tool.chaozhi.hk" },
-                    data: '{ "type": 2, "name": "Coolkk", "pass": "coolkk" }',
+                    data: '{ "type": 2, "name": "TestAccount", "pass": "TestAccount" }',
                     onload: function (res) {
                         res = JSON.parse(res.responseText);
                         GM_xmlhttpRequest({
