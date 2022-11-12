@@ -108,7 +108,7 @@
                     method: "POST",
                     responseType: "json",
                     timeout: 10000,
-                    headers: { "Content-Type": "application/json", "Host": "tool.chaozhi.hk" },
+                    headers: { "Content-Type": "application/json", "Host": "api.chaozhi.hk" },
                     data: '{ "type": 2, "name": "TestAccount", "pass": "TestAccount" }',
                     onload: function (res) {
                         res = JSON.parse(res.responseText);
@@ -117,7 +117,7 @@
                             method: "POST",
                             responseType: "json",
                             timeout: 10000,
-                            headers: { "Content-Type": "application/json", "Host": "tool.chaozhi.hk" },
+                            headers: { "Content-Type": "application/json", "Host": "api.chaozhi.hk" },
                             data: `{ "tkl": "${code}", "token": "${res.data.token}" }`,
                             onload: function (res) {
                                 res = JSON.parse(res.responseText);
