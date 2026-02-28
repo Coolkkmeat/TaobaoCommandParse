@@ -13,6 +13,7 @@
 // @license         Apache License 2.0
 // @charset		    UTF-8
 // @include         http*://*taobao.com/*
+// @grant           GM_notification
 // @grant           GM_setValue
 // @grant           GM_getValue
 // @grant           GM_registerMenuCommand
@@ -100,6 +101,11 @@
     function request(code) {
         switch (config["data_source_now"]) {
             case "default":
+                GM_notification({
+                    title: "淘口令解析",
+                    text: "淘口令 [" + code + "] 解析错误",
+                    timeout: 5000,
+                });
                 break;
             default:
                 control_dataSource();
