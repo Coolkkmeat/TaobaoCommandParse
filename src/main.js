@@ -16,9 +16,6 @@
 // @grant           GM_setValue
 // @grant           GM_getValue
 // @grant           GM_registerMenuCommand
-// @grant           GM_xmlhttpRequest
-// @connect         chaozhi.hk
-// @connect         taodaxiang.com
 // @run-at          document-idle
 // ==/UserScript==
 
@@ -32,7 +29,7 @@
      * 入口
      */
     //设置
-    const config = { "data_source_list": ["taobaoke", "taodaxiang"], "data_source_now": GM_getValue("data_source_now", "none") }
+    const config = { "data_source_list": ["default"], "data_source_now": GM_getValue("data_source_now", "none") }
     if (config["data_source_now"] == "none") {
         control_dataSource();
     }
@@ -102,48 +99,7 @@
      */
     function request(code) {
         switch (config["data_source_now"]) {
-            case "taobaoke":
-                GM_xmlhttpRequest({
-                    url: "//api.chaozhi.hk/tool/webLogin",
-                    method: "POST",
-                    responseType: "json",
-                    timeout: 10000,
-                    headers: { "Content-Type": "application/json", "Host": "api.chaozhi.hk" },
-                    data: '{ "type": 2, "name": "TestAccount", "pass": "TestAccount" }',
-                    onload: function (res) {
-                        res = JSON.parse(res.responseText);
-                        GM_xmlhttpRequest({
-                            url: "//api.chaozhi.hk/tb/tklParse",
-                            method: "POST",
-                            responseType: "json",
-                            timeout: 10000,
-                            headers: { "Content-Type": "application/json", "Host": "api.chaozhi.hk" },
-                            data: `{ "tkl": "${code}", "token": "${res.data.token}" }`,
-                            onload: function (res) {
-                                res = JSON.parse(res.responseText);
-                                if (res.msgCode == 0) {
-                                    window.location.href = res.data.url;
-                                }
-                            }
-                        });
-                    }
-                });
-                break;
-            case "taodaxiang":
-                GM_xmlhttpRequest({
-                    url: "//taodaxiang.com/taopass/parse/get",
-                    method: "POST",
-                    responseType: "json",
-                    timeout: 10000,
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    data: `content=${code}`,
-                    onload: function (res) {
-                        res = JSON.parse(res.responseText);
-                        if (res.code == 0) {
-                            window.location.href = res.data.url;
-                        }
-                    }
-                });
+            case "default":
                 break;
             default:
                 control_dataSource();
